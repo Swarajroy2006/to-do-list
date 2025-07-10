@@ -44,9 +44,8 @@ This app helps you organize your daily tasks with features like edit, delete, ch
 ---
 
 ## 📁 Project Structure
-
-to-do-list/
 <PRE>
+to-do-list/
 ├── index.html
 ├── style.css
 ├── script.js
@@ -66,3 +65,13 @@ to-do-list/
 This project is licensed under the **MIT License** – feel free to use, modify, and distribute with credit.
 
 📄 [View License](LICENSE)
+---
+#### [🔗 View on GitHub](https://github.com/Swarajroy2006/to-do-list)
+
+<p align="center">
+  <a href="https://swaraj.ai.in" target="_blank">
+    <img src="https://img.shields.io/badge/Visit%20My%20Website-Click%20Here-blue?style=for-the-badge&logo=Google-Chrome" alt="Visit Website"/>
+  </a>
+</p>
+
+
