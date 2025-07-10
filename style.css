@@ -1,0 +1,276 @@
+/* File: style.css */
+
+/*import font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+*{
+    margin: 0;
+    padding: 0;
+}
+:root {
+    --primary-color: #e91414;
+    --secondary-color: #153d9a;
+    --text-color: wheat;
+    --border-glass:rgba(255,255,255,0.25);
+    --shadow: 0 8px 32px rgba(0,0,0,0.2);
+    --primary: #FF7EB9;
+    --bg-glass: rgba(255,255,255,0.15);
+    --primary-dark: #FF2D6F;
+}
+html,body{
+  height: 100%;
+  overflow-y: auto;
+ scrollbar-width: none;  /* firefox */
+ -ms-overflow-style: none;  /*Internet Explorer*/  
+}
+
+
+body{
+    background-color: #f0f0f0;
+     font-family: "IM Fell English SC", serif;
+     display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    line-height: 1.5;
+    background: linear-gradient(to right, #e91414, #153d9a);
+    color: wheat;;
+}
+body::-webkit-scrollbar{
+  display: none;
+}
+
+.task-manager {
+  background-color: rgba(255,255,255,0.1);
+  padding: 2.5rem;
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-glass);
+  margin: 5%;
+
+}
+
+
+.task-manager h1{
+  font-size: 2.4rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to right, #d74f8c,#0970bc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.status-panel{
+  padding: 1.5rem;
+  background-color: rgba(227, 210, 59, 0.159);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-glass);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: center
+  
+    
+}
+
+.info h3 {
+  font-size: 1.2rem;
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+
+#task-stats {
+  background: var(--primary);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.input-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  margin-right: auto;
+  margin-left: auto
+}
+#add-button {
+  background-color: var(--primary);
+  color: rgb(225, 217, 217);
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  height: 40px;
+  margin-left: 0.2rem;
+}
+
+
+#add-button:hover {
+  background-color: #ffffff22;}
+
+.input-form input {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: none;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  background-color: rgba(255,255,255,0.2);
+  color: var(--text-color);
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 500;
+
+}
+.input-form input::placeholder {
+  color: rgba(255,255,255,0.7);
+  font-weight: 500;
+}
+
+.input-form input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255,126,185,0.3);
+}
+
+
+.empty-state-image {
+  height: 350px;
+  display: block;
+  margin: 0 auto;
+  opacity: 0.8;
+  margin-top: 1rem
+}
+
+
+#progress-indicator {
+  width: 100%;
+  background-color: #e94214;
+  border-radius: 2px;
+  margin-top: 1rem;
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+  transition: width 0.3s ease;
+  height: 8px;
+  border-radius: 20px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+/* edit task - js
+  */
+  .editing {
+    background-color: #f0f8ff; 
+    transition: background-color 0.3s;
+}
+
+.edit-input {
+    font-family: inherit;
+    padding: 5px 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: calc(100% - 20px);
+}
+
+.task {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.task .edit-input {
+    flex: 1;
+    padding: 4px 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    outline: none;
+    background: #fff;
+    color: #333;
+}
+
+.task.editing {
+    background-color: rgba(200, 16, 16, 0.1);
+}
+
+/**/
+
+ton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 16px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+
+.task-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.task-actions button {
+    background-color: #333;
+    border: none;
+    padding: 6px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.task-actions button:hover {
+    background-color: #555;
+    transform: scale(1.05);
+}
+
+.task-actions button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+
+/*edit button colour*/
+.edit-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+} 
+
+
+
+@media (max-width: 600px) {
+  .task-manager {
+    padding: 1.5rem;
+  }
+  #task-stats {
+    width: 50px;
+    height: 50px;
+    font-size: 1rem;
+  }
+  .empty-state-image {
+    height: 250px;
+  }
+}
