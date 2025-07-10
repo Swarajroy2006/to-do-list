@@ -46,19 +46,20 @@ This app helps you organize your daily tasks with features like edit, delete, ch
 ## 📁 Project Structure
 
 to-do-list/
+<PRE>
 ├── index.html
 ├── style.css
 ├── script.js
 ├── image/
-│   ├── favicon.png
-│   └── to-do-list.png
+│ ├── favicon.png
+│ └── to-do-list.png
 ├── assets/
-│   ├── Screenshot 2025-07-09 235014.png
-│   ├── Screenshot 2025-07-09 235151.png
-│   └── Screenshot 2025-07-09 235330.png
-├──README.md   ✅
-└── LICENCE   ✅
-
+│ ├── Screenshot 2025-07-09 235014.png
+│ ├── Screenshot 2025-07-09 235151.png
+│ └── Screenshot 2025-07-09 235330.png
+├──README.md ✅
+└── LICENCE ✅
+</PRE>
 --- 
 ## 📝 License
 
