@@ -1,224 +1,201 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function () {
     const taskInput = document.getElementById('input-field');
     const addTaskBtn = document.getElementById('add-button');
     const taskList = document.getElementById('tasks-list');
-    const emptyImage = document.querySelector('.empty-state-image');
+    const emptyImage = document.getElementById('empty-state-image');
     const progressBar = document.getElementById('progress-indicator');
     const progressNumbers = document.getElementById('task-stats');
+    const motivationText = document.querySelector('.info h3');
 
+    loadTasksFromLocalStorage();
 
-    
-
-
-
-
-    // Toggle empty image
-    const toggleEmptyState = () => {
-        const isEmpty = taskList.children.length === 0;
-        emptyImage.style.display = isEmpty ? 'block' : 'none';
-    };
-
-    // Update progress bar
-    const updateProgress = () => {
-        const totalTask = taskList.children.length;
-        const completedTasks = taskList.querySelectorAll('.task-checkbox:checked').length;
-        const percent = totalTask ? (completedTasks / totalTask) * 100 : 0;
-
-        progressBar.style.width = `${percent}%`;
-        progressNumbers.textContent = `${completedTasks}/${totalTask}`;
-
-        if (totalTask > 0 && completedTasks === totalTask) {
-            const count = 200,
-  defaults = {
-    origin: { y: 0.7 },
-  };
-
-function fire(particleRatio, opts) {
-  confetti(
-    Object.assign({}, defaults, opts, {
-      particleCount: Math.floor(count * particleRatio),
-    })
-  );
-}
-
-fire(0.25, {
-  spread: 26,
-  startVelocity: 55,
-});
-
-fire(0.2, {
-  spread: 60,
-});
-
-fire(0.35, {
-  spread: 100,
-  decay: 0.91,
-  scalar: 0.8,
-});
-
-fire(0.1, {
-  spread: 120,
-  startVelocity: 25,
-  decay: 0.92,
-  scalar: 1.2,
-});
-
-fire(0.1, {
-  spread: 120,
-  startVelocity: 45,
-});
-        }
-    };
-
-    // Save to localStorage
-    const saveTasksToLocalStorage = () => {
-        const tasks = Array.from(taskList.querySelectorAll('li')).map(li => ({
-            text: li.querySelector('.task-text')?.textContent || '',
-            completed: li.querySelector('.task-checkbox')?.checked || false
-        }));
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-    };
-
-    // Load from localStorage
-    const loadTasksFromLocalStorage = () => {
-        const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-        savedTasks.forEach(({ text, completed }) => {
-            createTaskElement(text, completed);
-        });
-        toggleEmptyState();
-        updateProgress();
-    };
-
-    // Create a task item
-    const createTaskElement = (taskText, completed = false) => {
-        const li = document.createElement('li');
-
-        li.innerHTML = `
-            <div class="task">
-                <input type="checkbox" class="task-checkbox" ${completed ? 'checked' : ''}>
-                <span class="task-text">${taskText}</span>
-                <div class="task-actions">
-                    <button class="edit-button"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EFEFEF"><path d="M160-400v-80h280v80H160Zm0-160v-80h440v80H160Zm0-160v-80h440v80H160Zm360 560v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg></button>
-                    <button class="delete-button"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EFEFEF"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></button>
-                </div>
-            </div>
-        `;
-
-        const checkbox = li.querySelector('.task-checkbox');
-        const editBtn = li.querySelector('.edit-button');
-        const deleteBtn = li.querySelector('.delete-button');
-        const taskSpan = li.querySelector('.task-text');
-
-        // Checkbox change
-        checkbox.addEventListener('change', () => {
-            li.classList.toggle('completed', checkbox.checked);
-            editBtn.disabled = checkbox.checked;
-            editBtn.style.opacity = checkbox.checked ? '0.5' : '1';
-            editBtn.style.pointerEvents = checkbox.checked ? 'none' : "auto";
-            saveTasksToLocalStorage();
-            updateProgress();
-        });
-
-        // Edit button
-        editBtn.addEventListener('click', () => {
-            if (checkbox.checked) return;
-
-            if (editBtn.textContent === 'Save') {
-                const input = li.querySelector('.edit-input');
-                const newText = input.value.trim();
-
-                if (newText) {
-                    const newSpan = document.createElement('span');
-                    newSpan.className = 'task-text';
-                    newSpan.textContent = newText;
-                    input.replaceWith(newSpan);
-                    editBtn.textContent = 'Edit';
-                    li.classList.remove('editing');
-                    checkbox.style.display = 'inline-block';  // Show checkbox again after edit
-                    saveTasksToLocalStorage();
-                    updateProgress();
-                } else {
-                    alert("Task can't be empty!");
-                    input.focus();
-                }
-
-                return;
-            }
-
-            // Begin editing
-            const currentText = taskSpan.textContent;
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = currentText;
-            input.className = 'edit-input';
-            checkbox.style.display = 'none';  // Hide checkbox during edit
-            taskSpan.replaceWith(input);
-            input.focus();
-            li.classList.add('editing');
-            editBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EFEFEF"><path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z"/></svg>';
-
-            const saveEdit = () => {
-                const newText = input.value.trim();
-                if (newText) {
-                    const newSpan = document.createElement('span');
-                    newSpan.className = 'task-text';
-                    newSpan.textContent = newText;
-                    input.replaceWith(newSpan);
-                    editBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EFEFEF"><path d="M160-400v-80h280v80H160Zm0-160v-80h440v80H160Zm0-160v-80h440v80H160Zm360 560v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/></svg>';
-                    li.classList.remove('editing');
-                    checkbox.style.display = 'inline-block';  // Show checkbox again after edit
-                    saveTasksToLocalStorage();
-                    updateProgress();
-                } else {
-                    alert("Task can't be empty!");
-                    input.focus();
-                }
-            };
-
-            // Fix for blur/click conflict
-            input.addEventListener('blur', () => {
-                setTimeout(saveEdit, 100);
-            });
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') saveEdit();
-            });
-        });
-
-        // Delete button
-        deleteBtn.addEventListener('click', () => {
-            li.remove();
-            toggleEmptyState();
-            saveTasksToLocalStorage();
-            updateProgress();
-        });
-
-        taskList.appendChild(li);
-        updateProgress();
-        toggleEmptyState();
-    };
-
-    // Add new task
-    const addTask = (event) => {
-        event.preventDefault();
+    // Add task
+    function addTask(e) {
+        e.preventDefault();
         const taskText = taskInput.value.trim();
         if (!taskText) return;
 
         createTaskElement(taskText);
         taskInput.value = '';
         saveTasksToLocalStorage();
-    };
+        taskInput.focus();
+        scrollToTop();
+    }
 
-    // Add button click
-    addTaskBtn.addEventListener('click', addTask);
+    // Create a new task element
+    function createTaskElement(taskText, completed = false) {
+        const li = document.createElement('li');
+        if (completed) li.classList.add('completed');
 
-    // Enter key press
-    taskInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            addTask(e);
+        li.innerHTML = `
+            <div class="task">
+                <input type="checkbox" class="task-checkbox" ${completed ? 'checked' : ''}>
+                <span class="task-text">${taskText}</span>
+                <div class="task-actions">
+                    <button class="edit-button" ${completed ? 'disabled' : ''}>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" fill="#EFEFEF">
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 
+                            0-1.41l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 
+                            3.75 3.75 1.84-1.83z"/>
+                        </svg>
+                    </button>
+                    <button class="delete-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" fill="#EFEFEF">
+                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 
+                            2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 
+                            1H5v2h14V4z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        const checkbox = li.querySelector('.task-checkbox');
+        const taskSpan = li.querySelector('.task-text');
+        const editBtn = li.querySelector('.edit-button');
+        const deleteBtn = li.querySelector('.delete-button');
+
+        checkbox.addEventListener('change', function () {
+            li.classList.toggle('completed', this.checked);
+            saveTasksToLocalStorage();
+            updateProgress();
+
+            const allCompleted =
+                taskList.querySelectorAll('li').length > 0 &&
+                taskList.querySelectorAll('li').length === taskList.querySelectorAll('li.completed').length;
+
+            if (allCompleted) {
+                triggerConfetti();
+            }
+        });
+
+        deleteBtn.addEventListener('click', function () {
+            li.remove();
+            saveTasksToLocalStorage();
+            updateProgress();
+            toggleEmptyState();
+        });
+
+        editBtn.addEventListener('click', function () {
+            if (li.classList.contains('completed')) return;
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = taskSpan.textContent;
+            input.className = 'edit-input';
+
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') finishEdit();
+            });
+
+            input.addEventListener('blur', finishEdit);
+
+            function finishEdit() {
+                const newSpan = document.createElement('span');
+                newSpan.className = 'task-text';
+                newSpan.textContent = input.value.trim();
+                input.replaceWith(newSpan);
+                saveTasksToLocalStorage();
+
+                // Rebind edit event
+                newSpan.addEventListener('click', () => editBtn.click());
+            }
+
+            taskSpan.replaceWith(input);
+            input.focus();
+        });
+
+        taskList.appendChild(li);
+        toggleEmptyState();
+        updateProgress();
+    }
+
+    // Update progress bar
+    function updateProgress() {
+        const tasks = taskList.querySelectorAll('li');
+        const completed = taskList.querySelectorAll('li.completed');
+        const percent = tasks.length ? (completed.length / tasks.length) * 100 : 0;
+
+        progressBar.style.width = `${percent}%`;
+        progressNumbers.textContent = `${completed.length}/${tasks.length}`;
+
+        const hue = (percent / 100) * 120;
+        progressBar.style.backgroundColor = `hsl(${hue}, 100%, 45%)`;
+
+        updateMotivationMessage(percent);
+    }
+
+    // Show confetti when all tasks are completed
+    function triggerConfetti() {
+        if (typeof confetti === 'function') {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff0000', '#00ff00', '#0000ff']
+            });
         }
-    });
+    }
 
-    toggleEmptyState();
-    loadTasksFromLocalStorage();
+    // Motivation messages based on % completed
+    function updateMotivationMessage(percent) {
+        const messages = [
+            { threshold: 0, options: ["Let's begin!", "Time to conquer tasks!", "Start strong!"] },
+            { threshold: 10, options: ["Nice start!", "You're on your way!", "Just warming up!"] },
+            { threshold: 25, options: ["Quarter done!", "Great progress!", "Keep it up!"] },
+            { threshold: 50, options: ["Halfway there!", "Crushing it!", "You’re doing great!"] },
+            { threshold: 75, options: ["Almost done!", "Just a few more!", "Stay sharp!"] },
+            { threshold: 90, options: ["So close!", "One final push!", "Finish line ahead!"] },
+            { threshold: 100, options: ["You did it!", "All tasks complete!", "Celebrate the win 🎉"] }
+        ];
+
+        const applicable = messages.filter(m => percent >= m.threshold);
+        if (applicable.length) {
+            const lastGroup = applicable[applicable.length - 1];
+            const randomMsg = lastGroup.options[Math.floor(Math.random() * lastGroup.options.length)];
+            motivationText.textContent = randomMsg;
+        }
+    }
+
+    // Save tasks to localStorage
+    function saveTasksToLocalStorage() {
+        const tasks = [];
+        taskList.querySelectorAll('li').forEach(li => {
+            tasks.push({
+                text: li.querySelector('.task-text').textContent,
+                completed: li.classList.contains('completed')
+            });
+        });
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    // Load from localStorage
+    function loadTasksFromLocalStorage() {
+        const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        taskList.innerHTML = '';
+        savedTasks.forEach(task => createTaskElement(task.text, task.completed));
+        updateProgress();
+    }
+
+    // Show/hide empty image
+    function toggleEmptyState() {
+        emptyImage.style.display = taskList.children.length === 0 ? 'block' : 'none';
+    }
+
+    // Scroll to top
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    // Events
+    addTaskBtn.addEventListener('click', addTask);
+    taskInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') addTask(e);
+    });
 });
+
+
+// localStorage.clear(); // only for development, remove later
